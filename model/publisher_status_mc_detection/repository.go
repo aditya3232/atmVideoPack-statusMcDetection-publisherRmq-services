@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/aditya3232/gatewatchApp-services.git/connection"
+	"github.com/aditya3232/atmVideoPack-statusMcDetection-publisherRmq-services.git/connection"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type Repository interface {
-	CreateQueueStatusMcDetection(input PublisherStatusMcInput) (StatusMcDetection, error)
+	CreateQueueStatusMcDetection(rmqPublisherStatusMcDetection RmqPublisherStatusMcDetection) (RmqPublisherStatusMcDetection, error)
 }
 
 type repository struct {
@@ -20,10 +20,11 @@ func NewRepository(rabbitmq *amqp.Connection) *repository {
 	return &repository{rabbitmq}
 }
 
-func (r *repository) CreateQueueStatusMcDetection(input PublisherStatusMcInput) (StatusMcDetection, error) {
+func (r *repository) CreateQueueStatusMcDetection(rmqPublisherStatusMcDetection RmqPublisherStatusMcDetection) (RmqPublisherStatusMcDetection, error) {
+
 	ch, err := connection.RabbitMQ().Channel()
 	if err != nil {
-		return StatusMcDetection{}, err
+		return rmqPublisherStatusMcDetection, err
 	}
 	defer ch.Close()
 
@@ -37,23 +38,24 @@ func (r *repository) CreateQueueStatusMcDetection(input PublisherStatusMcInput) 
 	)
 
 	if err != nil {
-		return StatusMcDetection{}, err
+		return rmqPublisherStatusMcDetection, err
 	}
 
-	// body from input
-	var inputReadytoMarshal = PublisherStatusMcInput{
-		Tid:           input.Tid,
-		DateTime:      input.DateTime,
-		StatusSignal:  input.StatusSignal,
-		StatusStorage: input.StatusStorage,
-		StatusRam:     input.StatusRam,
-		StatusCpu:     input.StatusCpu,
+	// yang akan dimarshal
+	var inputReadytoMarshal = RmqPublisherStatusMcDetection{
+		TidID:         rmqPublisherStatusMcDetection.TidID,
+		Tid:           rmqPublisherStatusMcDetection.Tid,
+		DateTime:      rmqPublisherStatusMcDetection.DateTime,
+		StatusSignal:  rmqPublisherStatusMcDetection.StatusSignal,
+		StatusStorage: rmqPublisherStatusMcDetection.StatusStorage,
+		StatusRam:     rmqPublisherStatusMcDetection.StatusRam,
+		StatusCpu:     rmqPublisherStatusMcDetection.StatusCpu,
 	}
 
 	// Convert the StatusMc struct to JSON
 	body, err := json.Marshal(inputReadytoMarshal)
 	if err != nil {
-		return StatusMcDetection{}, err
+		return rmqPublisherStatusMcDetection, err
 	}
 
 	ctx := context.Background() // Create a context
@@ -69,9 +71,9 @@ func (r *repository) CreateQueueStatusMcDetection(input PublisherStatusMcInput) 
 	)
 
 	if err != nil {
-		return StatusMcDetection{}, err
+		return rmqPublisherStatusMcDetection, err
 	}
 
 	// Return the sent StatusMcDetection struct
-	return StatusMcDetection{}, err
+	return rmqPublisherStatusMcDetection, err
 }
