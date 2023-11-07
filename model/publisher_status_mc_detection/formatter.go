@@ -2,7 +2,6 @@ package publisher_status_mc_detection
 
 type RmqPublisherStatusMcDetectionFormatter struct {
 	Tid           string `json:"tid"`
-	TidID         *int   `json:"tid_id"`
 	DateTime      string `json:"date_time"`
 	StatusSignal  string `json:"status_signal"`
 	StatusStorage string `json:"status_storage"`
@@ -15,7 +14,6 @@ func PublisherStatusMcDetectionFormat(rmqPublisherStatusMcDetection RmqPublisher
 	var formatter RmqPublisherStatusMcDetectionFormatter
 
 	formatter.Tid = rmqPublisherStatusMcDetection.Tid
-	formatter.TidID = rmqPublisherStatusMcDetection.TidID
 	formatter.DateTime = rmqPublisherStatusMcDetection.DateTime
 	formatter.StatusSignal = rmqPublisherStatusMcDetection.StatusSignal
 	formatter.StatusStorage = rmqPublisherStatusMcDetection.StatusStorage

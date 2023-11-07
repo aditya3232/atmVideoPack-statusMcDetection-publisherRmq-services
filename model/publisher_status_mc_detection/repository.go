@@ -43,7 +43,6 @@ func (r *repository) CreateQueueStatusMcDetection(rmqPublisherStatusMcDetection 
 
 	// yang akan dimarshal
 	var inputReadytoMarshal = RmqPublisherStatusMcDetection{
-		TidID:         rmqPublisherStatusMcDetection.TidID,
 		Tid:           rmqPublisherStatusMcDetection.Tid,
 		DateTime:      rmqPublisherStatusMcDetection.DateTime,
 		StatusSignal:  rmqPublisherStatusMcDetection.StatusSignal,

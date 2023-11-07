@@ -7,5 +7,4 @@ type RmqPublisherStatusMcDetectionInput struct {
 	StatusStorage string `form:"status_storage" binding:"required"`
 	StatusRam     string `form:"status_ram" binding:"required"`
 	StatusCpu     string `form:"status_cpu" binding:"required"`
-	TidID         *int   `form:"tid_id"` // ini untuk menampung hasil pencarian id berdasarkan tid yang diinput di api
 }
